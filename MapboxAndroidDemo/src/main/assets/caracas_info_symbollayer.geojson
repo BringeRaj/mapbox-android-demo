@@ -1,0 +1,19 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "Hello World!",
+        "description": "Welcome to my marker."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+        -66.910519,
+        10.503250
+        ]
+      }
+    }
+  ]
+}
