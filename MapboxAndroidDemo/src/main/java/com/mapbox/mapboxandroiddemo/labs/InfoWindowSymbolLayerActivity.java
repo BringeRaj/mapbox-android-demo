@@ -46,14 +46,17 @@ import java.util.Map;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.eq;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.get;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.literal;
+import static com.mapbox.mapboxsdk.style.layers.Property.ICON_ANCHOR_BOTTOM;
+import static com.mapbox.mapboxsdk.style.layers.Property.ICON_ANCHOR_TOP;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAnchor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconKeepUpright;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.visibility;
 
 public class InfoWindowSymbolLayerActivity extends AppCompatActivity implements
-  OnMapReadyCallback, MapboxMap.OnMapClickListener {
+    OnMapReadyCallback, MapboxMap.OnMapClickListener {
 
   private MapView mapView;
   private MapboxMap mapboxMap;
@@ -66,7 +69,6 @@ public class InfoWindowSymbolLayerActivity extends AppCompatActivity implements
   private String FEATURE_TITLE_PROPERTY_KEY = "FEATURE_TITLE_PROPERTY_KEY";
   private String FEATURE_DESCRIPTION_PROPERTY_KEY = "FEATURE_DESCRIPTION_PROPERTY_KEY";
   private String TAG = "InfoWindowSymbolLayerActivity";
-  private AnimatorSet animatorSet;
 
   private static final long CAMERA_ANIMATION_TIME = 1950;
 
@@ -87,7 +89,7 @@ public class InfoWindowSymbolLayerActivity extends AppCompatActivity implements
   private int currentStep;
 
   @Retention(RetentionPolicy.SOURCE)
-  @IntDef( {STEP_INITIAL, STEP_LOADING, STEP_READY})
+  @IntDef({STEP_INITIAL, STEP_LOADING, STEP_READY})
   public @interface ActivityStep {
   }
 
@@ -201,7 +203,7 @@ public class InfoWindowSymbolLayerActivity extends AppCompatActivity implements
 
   private void setUpImage() {
     Bitmap icon = BitmapFactory.decodeResource(
-      this.getResources(), R.drawable.red_marker);
+        this.getResources(), R.drawable.red_marker);
     mapboxMap.addImage(MARKER_IMAGE_ID, icon);
   }
 
@@ -216,10 +218,10 @@ public class InfoWindowSymbolLayerActivity extends AppCompatActivity implements
    */
   private void setupMarkerLayer() {
     mapboxMap.addLayer(new SymbolLayer(MARKER_LAYER_ID, GEOJSON_SOURCE_ID)
-      .withProperties(
-        iconImage(MARKER_IMAGE_ID),
-        iconAllowOverlap(true)
-      ));
+        .withProperties(
+            iconImage(MARKER_IMAGE_ID),
+            iconAllowOverlap(true)
+        ));
   }
 
   /**
@@ -230,21 +232,21 @@ public class InfoWindowSymbolLayerActivity extends AppCompatActivity implements
    */
   private void setupCalloutLayer() {
     mapboxMap.addLayer(new SymbolLayer(CALLOUT_LAYER_ID, GEOJSON_SOURCE_ID)
-      .withProperties(
-        /* show image with id title based on the value of the title feature property */
-        iconImage("{title}"),
+        .withProperties(
+            /* show image with id title based on the value of the title feature property */
+            iconImage("{title}"),
 
-        /* set anchor of icon to bottom-left */
-        iconAnchor("bottom-left"),
+            /* set anchor of icon to bottom-left */
+            iconAnchor(ICON_ANCHOR_BOTTOM),
 
-        iconAllowOverlap(true),
+            iconAllowOverlap(true),
 
-        /* offset icon slightly to match bubble layout */
-        iconOffset(new Float[] {-20.0f, -10.0f})
-      )
+            /* offset icon slightly to match bubble layout */
 
-      /* add a filter to show only when selected feature property is true */
-      .withFilter(eq((get(PROPERTY_SELECTED)), literal(true))));
+            iconOffset(new Float[]{-2f, -25f})
+        )
+        /* add a filter to show only when selected feature property is true */
+        .withFilter(eq((get(PROPERTY_SELECTED)), literal(true))));
   }
 
   private void hideLabelLayers() {
@@ -467,9 +469,9 @@ public class InfoWindowSymbolLayerActivity extends AppCompatActivity implements
     @Override
     public LatLng evaluate(float fraction, LatLng startValue, LatLng endValue) {
       latLng.setLatitude(startValue.getLatitude()
-        + ((endValue.getLatitude() - startValue.getLatitude()) * fraction));
+          + ((endValue.getLatitude() - startValue.getLatitude()) * fraction));
       latLng.setLongitude(startValue.getLongitude()
-        + ((endValue.getLongitude() - startValue.getLongitude()) * fraction));
+          + ((endValue.getLongitude() - startValue.getLongitude()) * fraction));
       return latLng;
     }
   }
